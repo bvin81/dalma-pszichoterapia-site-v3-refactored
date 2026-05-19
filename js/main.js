@@ -668,15 +668,108 @@ if (contactForm) {
 }
 
 /* ---------------------------------------------------
+   HEADER SCROLL SHRINK
+--------------------------------------------------- */
+function initHeaderScroll() {
+  const header = document.querySelector('.header');
+  if (!header) return;
+
+  const toggle = rafThrottle(() => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  window.addEventListener('scroll', toggle, { passive: true });
+}
+
+/* ---------------------------------------------------
+   HERO KEN BURNS
+--------------------------------------------------- */
+function initHeroKenBurns() {
+  const hero = document.querySelector('.hero');
+  if (!hero || !hero.style.backgroundImage) return;
+
+  const heroBg = document.createElement('div');
+  heroBg.className = 'hero-bg';
+  heroBg.style.backgroundImage = hero.style.backgroundImage;
+  hero.style.backgroundImage = 'none';
+  hero.insertBefore(heroBg, hero.firstChild);
+}
+
+/* ---------------------------------------------------
+   SCROLL REVEAL
+--------------------------------------------------- */
+function initScrollReveal() {
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  requestAnimationFrame(() => {
+    // Service cards: felváltva bal/jobb oldalról úsznak be, egyenként
+    const serviceCards = document.querySelectorAll('#services .grid-3 > *');
+    const serviceCardSet = new Set(serviceCards);
+
+    serviceCards.forEach((el, i) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top >= window.innerHeight) {
+        el.classList.add(i % 2 === 0 ? 'reveal-left' : 'reveal-right');
+        el.style.transitionDelay = `${i * 0.18}s`;
+        observer.observe(el);
+      }
+    });
+
+    // Egyéb grid-ek: stagger felfelé
+    document.querySelectorAll('.grid-3, .grid-2').forEach(grid => {
+      if (!grid.closest('#services')) grid.classList.add('reveal-stagger');
+    });
+
+    // Általános elemek
+    const selectors = [
+      '.services h2',
+      '.contact h2',
+      '.contact-form',
+      '.affirmation p',
+      '.affirmation a',
+      '.about-content',
+      '.service-detail',
+      '.blog-header h1',
+      '.grid-3 > *',
+      '.grid-2 > *',
+    ];
+
+    selectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(el => {
+        if (serviceCardSet.has(el)) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top >= window.innerHeight) {
+          el.classList.add('reveal');
+          observer.observe(el);
+        }
+      });
+    });
+  });
+}
+
+/* ---------------------------------------------------
    PAGE INITIALIZATION
 --------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', function() {
   console.log("🚀 Page loaded, base path:", getBasePath());
-  
+
   initDarkMode();
   initScrollToTop();
   initLazyLoading();
   loadStaticText();
+  initHeaderScroll();
+  initHeroKenBurns();
+  initScrollReveal();
 
   if (document.getElementById("blogContainer")) {
     loadBlogList();
@@ -684,25 +777,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (document.getElementById("postTitle")) {
     loadBlogPost();
-  }
-
-  if ('IntersectionObserver' in window) {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('fade-in');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.card, .service-card, section').forEach(el => {
-      observer.observe(el);
-    });
   }
 });
