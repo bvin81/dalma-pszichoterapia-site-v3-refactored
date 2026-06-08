@@ -172,105 +172,23 @@
   <div class="container">
     <h2 data-key="services_title">Szolgáltatások</h2>
 
-    <div class="services-accordion">
-
-      <div class="accordion-item">
-        <button class="accordion-header" aria-expanded="true">
-          <span data-key="service_psych_title">Egyéni tanácsadás</span>
-          <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="accordion-body open">
-          <div class="accordion-content">
-            <img src="images/service-psychological.jpg" alt="Egyéni tanácsadás" loading="lazy">
-            <div class="accordion-text">
-              <p data-key="service_psych_desc">Rövid folyamat aktuális élethelyzeti nehézségekhez, döntéshelyzetekhez.</p>
-              <a href="service/psychological.html" class="btn btn-secondary" data-key="service_more">Bővebben</a>
-            </div>
-          </div>
+    <div class="book-wrapper">
+      <button class="book-nav-btn book-prev hidden" aria-label="Előző oldal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <div class="book" id="servicesBook">
+        <div class="book-page book-left" id="bookLeft"></div>
+        <div class="book-page book-right-bg" id="bookRightBg"></div>
+        <div class="book-flip" id="bookFlip">
+          <div class="book-flip-side book-flip-front" id="bookFlipFront"></div>
+          <div class="book-flip-side book-flip-back" id="bookFlipBack"></div>
         </div>
       </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" aria-expanded="false">
-          <span data-key="service_individual_title">Egyéni pszichoterápia</span>
-          <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-content">
-            <img src="images/service-individual.jpg" alt="Egyéni pszichoterápia" loading="lazy">
-            <div class="accordion-text">
-              <p data-key="service_individual_desc">Rendszerszemléletű terápia egyéni nehézségek feldolgozására.</p>
-              <a href="service/individual.html" class="btn btn-secondary" data-key="service_more">Bővebben</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" aria-expanded="false">
-          <span data-key="service_couples_title">Család- és párterápia</span>
-          <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-content">
-            <img src="images/service-couples.jpg" alt="Család- és párterápia" loading="lazy">
-            <div class="accordion-text">
-              <p data-key="service_couples_desc">Rendszerszemléletű támogatás párok és családok számára.</p>
-              <a href="service/couples.html" class="btn btn-secondary" data-key="service_more">Bővebben</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" aria-expanded="false">
-          <span data-key="service_online_title">Online terápia</span>
-          <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-content">
-            <img src="images/service-online.jpg" alt="Online terápia" loading="lazy">
-            <div class="accordion-text">
-              <p data-key="service_online_desc">Hatékony terápia otthonod kényelméből, videókonferencia platformon keresztül.</p>
-              <a href="service/online-therapy.html" class="btn btn-secondary" data-key="service_more">Bővebben</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" aria-expanded="false">
-          <span data-key="service_group_title">Csoport pszichoterápia</span>
-          <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-content">
-            <img src="images/service-group.jpg" alt="Csoport pszichoterápia" loading="lazy">
-            <div class="accordion-text">
-              <p data-key="service_group_desc">Támogató közösség önismeret fejlesztésére és kapcsolati minták feltárására.</p>
-              <a href="service/group-therapy.html" class="btn btn-secondary" data-key="service_more">Bővebben</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" aria-expanded="false">
-          <span data-key="service_sindelar_title">Tanulási zavar megelőzése</span>
-          <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-content">
-            <img src="images/service-sindelar.jpg" alt="Tanulási zavar megelőzése" loading="lazy">
-            <div class="accordion-text">
-              <p data-key="service_sindelar_desc">Részképesség zavarok felismerése és otthoni fejlesztőprogram magyar nyelvű gyermekek számára.</p>
-              <a href="service/sindelar-therapy.html" class="btn btn-secondary" data-key="service_more">Bővebben</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <button class="book-nav-btn book-next" aria-label="Következő oldal">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
     </div>
+    <div class="book-dots" id="bookDots"></div>
   </div>
 </section>
 

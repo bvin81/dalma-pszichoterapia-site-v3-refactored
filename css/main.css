@@ -362,106 +362,182 @@ html {
 }
 
 /* =================================================================
-   SZOLGÁLTATÁSOK ACCORDION
+   SZOLGÁLTATÁSOK KÖNYV
    ================================================================= */
 
-.services-accordion {
-  max-width: 800px;
-  margin: 0 auto;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.accordion-item {
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.accordion-header {
-  width: 100%;
+.book-wrapper {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-md) 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: var(--font-size-xl);
-  font-family: var(--font-heading);
-  font-weight: 600;
-  color: var(--text-main);
-  text-align: left;
-  transition: color var(--transition-fast);
-  gap: var(--spacing-sm);
-}
-
-.accordion-header:hover {
-  color: var(--accent-main);
-}
-
-.accordion-header[aria-expanded="true"] {
-  color: var(--accent-main);
-}
-
-.accordion-icon {
-  width: 28px;
-  height: 28px;
-  fill: currentColor;
-  flex-shrink: 0;
-  transition: transform var(--transition-smooth);
-}
-
-.accordion-header[aria-expanded="true"] .accordion-icon {
-  transform: rotate(180deg);
-}
-
-.accordion-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-}
-
-.accordion-body.open {
-  max-height: 300px;
-}
-
-.accordion-content {
-  display: flex;
   gap: var(--spacing-md);
-  align-items: flex-start;
-  padding-bottom: var(--spacing-md);
 }
 
-.accordion-content img {
-  width: 220px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  flex-shrink: 0;
+.book {
+  flex: 1;
+  display: flex;
+  position: relative;
+  perspective: 2500px;
+  min-height: 400px;
+  border-radius: var(--radius-card);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
 }
 
-.accordion-text {
+.book-page {
+  flex: 1;
+  padding: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.book-left {
+  background: linear-gradient(to right, #ede8e1, var(--bg-surface));
+  border-right: 2px solid var(--border-subtle);
+  box-shadow: inset -6px 0 16px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+.book-right-bg {
+  background: var(--bg-surface);
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+}
+
+/* Lapozó elem */
+.book-flip {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 10;
+  display: none;
+}
+
+.book-flip-side {
+  position: absolute;
+  inset: 0;
+  padding: var(--spacing-lg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.book-flip-front {
+  background: var(--bg-surface);
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+}
+
+.book-flip-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(to right, #ede8e1, var(--bg-surface));
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+/* Oldal tartalom */
+.book-page-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  height: 100%;
 }
 
-.accordion-text p {
+.book-page-inner img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.book-page-inner h3 {
+  font-size: var(--font-size-lg);
+  line-height: 1.3;
+  margin-bottom: var(--spacing-xs);
+}
+
+.book-page-inner p {
   color: var(--text-muted);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   line-height: 1.6;
-  margin: 0;
+  flex: 1;
+  margin-bottom: var(--spacing-sm);
 }
 
-@media (max-width: 600px) {
-  .accordion-content {
-    flex-direction: column;
+.book-page-inner .btn {
+  align-self: flex-start;
+}
+
+/* Navigáció */
+.book-nav-btn {
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.book-nav-btn:hover {
+  background: var(--accent-main);
+  border-color: var(--accent-main);
+}
+
+.book-nav-btn svg {
+  fill: var(--text-muted);
+  transition: fill var(--transition-fast);
+}
+
+.book-nav-btn:hover svg {
+  fill: white;
+}
+
+.book-nav-btn.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Pontok */
+.book-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: var(--spacing-md);
+}
+
+.book-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-subtle);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.book-dot.active {
+  background: var(--accent-main);
+  transform: scale(1.3);
+}
+
+.book-dot:hover:not(.active) {
+  background: var(--accent-soft);
+}
+
+@media (max-width: 700px) {
+  .book-right-bg {
+    display: none;
   }
 
-  .accordion-content img {
-    width: 100%;
-    height: 160px;
+  .book-left {
+    border-right: none;
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
   }
 
-  .accordion-header {
-    font-size: var(--font-size-lg);
+  .book-flip {
+    display: none !important;
   }
 }

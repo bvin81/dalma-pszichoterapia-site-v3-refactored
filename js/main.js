@@ -765,30 +765,113 @@ function initScrollReveal() {
 }
 
 /* ---------------------------------------------------
-   SERVICES ACCORDION
+   SERVICES BOOK
 --------------------------------------------------- */
-function initServicesAccordion() {
-  const items = document.querySelectorAll('.accordion-item');
-  if (!items.length) return;
+const SERVICES = [
+  { titleKey: 'service_psych_title',     descKey: 'service_psych_desc',     img: 'images/service-psychological.jpg', url: 'service/psychological.html' },
+  { titleKey: 'service_individual_title',descKey: 'service_individual_desc', img: 'images/service-individual.jpg',   url: 'service/individual.html' },
+  { titleKey: 'service_couples_title',   descKey: 'service_couples_desc',   img: 'images/service-couples.jpg',       url: 'service/couples.html' },
+  { titleKey: 'service_online_title',    descKey: 'service_online_desc',    img: 'images/service-online.jpg',        url: 'service/online-therapy.html' },
+  { titleKey: 'service_group_title',     descKey: 'service_group_desc',     img: 'images/service-group.jpg',         url: 'service/group-therapy.html' },
+  { titleKey: 'service_sindelar_title',  descKey: 'service_sindelar_desc',  img: 'images/service-sindelar.jpg',      url: 'service/sindelar-therapy.html' },
+];
 
-  items.forEach(item => {
-    const header = item.querySelector('.accordion-header');
-    const body = item.querySelector('.accordion-body');
+function initServicesBook() {
+  const bookLeft     = document.getElementById('bookLeft');
+  const bookRightBg  = document.getElementById('bookRightBg');
+  const bookFlip     = document.getElementById('bookFlip');
+  const flipFront    = document.getElementById('bookFlipFront');
+  const flipBack     = document.getElementById('bookFlipBack');
+  const prevBtn      = document.querySelector('.book-prev');
+  const nextBtn      = document.querySelector('.book-next');
+  const dotsEl       = document.getElementById('bookDots');
+  if (!bookLeft) return;
 
-    header.addEventListener('click', () => {
-      const isOpen = header.getAttribute('aria-expanded') === 'true';
+  const SPREADS = Math.ceil(SERVICES.length / 2);
+  let current = 0;
+  let busy = false;
 
-      items.forEach(i => {
-        i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
-        i.querySelector('.accordion-body').classList.remove('open');
-      });
+  for (let i = 0; i < SPREADS; i++) {
+    const dot = document.createElement('button');
+    dot.className = i === 0 ? 'book-dot active' : 'book-dot';
+    dot.setAttribute('aria-label', `${i + 1}. oldalpár`);
+    dot.addEventListener('click', () => { if (i !== current) i > current ? flipNext() : flipPrev(); });
+    dotsEl.appendChild(dot);
+  }
 
-      if (!isOpen) {
-        header.setAttribute('aria-expanded', 'true');
-        body.classList.add('open');
-      }
-    });
-  });
+  function fill(el, idx) {
+    const bp = getBasePath();
+    const s = SERVICES[idx];
+    if (!s) { el.innerHTML = ''; return; }
+    el.innerHTML = `
+      <div class="book-page-inner">
+        <img src="${bp}${s.img}" alt="" loading="lazy">
+        <h3 data-key="${s.titleKey}"></h3>
+        <p data-key="${s.descKey}"></p>
+        <a href="${bp}${s.url}" class="btn btn-secondary" data-key="service_more">Bővebben</a>
+      </div>`;
+    if (cachedTranslations) updateDOM(cachedTranslations);
+  }
+
+  function syncUI(spread) {
+    dotsEl.querySelectorAll('.book-dot').forEach((d, i) => d.classList.toggle('active', i === spread));
+    prevBtn?.classList.toggle('hidden', spread === 0);
+    nextBtn?.classList.toggle('hidden', spread === SPREADS - 1);
+  }
+
+  function isMobile() { return window.innerWidth <= 700; }
+
+  function animate(dir, nextSpread) {
+    const isNext = dir === 1;
+
+    if (isNext) {
+      fill(flipFront, current * 2 + 1);
+      fill(flipBack,  nextSpread * 2);
+      fill(bookRightBg, nextSpread * 2 + 1);
+      bookFlip.style.cssText = 'display:block; left:50%; transform-origin:left center; transition:none; transform:rotateY(0deg);';
+    } else {
+      fill(flipFront, current * 2);
+      fill(flipBack,  nextSpread * 2 + 1);
+      fill(bookRightBg, nextSpread * 2 + 1);
+      bookFlip.style.cssText = 'display:block; left:0; transform-origin:right center; transition:none; transform:rotateY(0deg);';
+    }
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      bookFlip.style.transition = 'transform 0.7s cubic-bezier(0.645,0.045,0.355,1)';
+      bookFlip.style.transform  = isNext ? 'rotateY(-180deg)' : 'rotateY(180deg)';
+    }));
+
+    setTimeout(() => {
+      current = nextSpread;
+      fill(bookLeft, current * 2);
+      bookFlip.style.cssText = 'display:none;';
+      syncUI(current);
+      busy = false;
+    }, 720);
+  }
+
+  function flipNext() {
+    if (busy || current >= SPREADS - 1) return;
+    busy = true;
+    const next = current + 1;
+    if (isMobile()) { current = next; fill(bookLeft, current * 2); syncUI(current); busy = false; return; }
+    animate(1, next);
+  }
+
+  function flipPrev() {
+    if (busy || current <= 0) return;
+    busy = true;
+    const prev = current - 1;
+    if (isMobile()) { current = prev; fill(bookLeft, current * 2); fill(bookRightBg, current * 2 + 1); syncUI(current); busy = false; return; }
+    animate(-1, prev);
+  }
+
+  prevBtn?.addEventListener('click', flipPrev);
+  nextBtn?.addEventListener('click', flipNext);
+
+  fill(bookLeft,    0);
+  fill(bookRightBg, 1);
+  syncUI(0);
 }
 
 /* ---------------------------------------------------
@@ -861,7 +944,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initHeaderScroll();
   initHeroKenBurns();
   initScrollReveal();
-  initServicesAccordion();
+  initServicesBook();
   initVideoCarousel();
 
   if (document.getElementById("blogContainer")) {
