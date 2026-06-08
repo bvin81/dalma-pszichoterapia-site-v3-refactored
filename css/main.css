@@ -618,4 +618,166 @@ html {
   .book-flip {
     display: none !important;
   }
+
+  /* Könyv elrejtése mobilon */
+  .book-wrapper,
+  .book-dots {
+    display: none !important;
+  }
+}
+
+/* =================================================================
+   SZOLGÁLTATÁSOK KÁRTYAPAKLI (mobil nézet)
+   ================================================================= */
+
+.card-stack-wrapper {
+  display: none; /* desktop: rejtett */
+}
+
+@media (max-width: 700px) {
+  .card-stack-wrapper {
+    display: block;
+    position: relative;
+    height: 430px;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+}
+
+/* Kártyalap */
+.svc-card {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: 400px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-card);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.07);
+  overflow: hidden;
+  cursor: pointer;
+  will-change: transform, opacity;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+
+.svc-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.svc-card-body {
+  padding: var(--spacing-md);
+}
+
+.svc-card-body h3 {
+  font-size: var(--font-size-lg);
+  margin: 0 0 var(--spacing-xs);
+  line-height: 1.3;
+}
+
+.svc-card-body p {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Húzd el tipp */
+.svc-swipe-hint {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .svc-swipe-hint {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+/* Részletek panel */
+.svc-detail-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-surface);
+  border-radius: var(--radius-card);
+  z-index: 20;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(24px) scale(0.97);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+}
+
+.svc-detail-overlay.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.svc-detail-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: rgba(0,0,0,0.07);
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 21;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.svc-detail-close:hover {
+  background: rgba(0,0,0,0.14);
+}
+
+.svc-detail-close svg {
+  fill: var(--text-main);
+}
+
+.svc-detail-overlay .svc-detail-cover {
+  width: 100%;
+  height: 155px;
+  object-fit: cover;
+  display: block;
+}
+
+.svc-detail-body {
+  padding: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+}
+
+.svc-detail-body h3 {
+  font-size: var(--font-size-lg);
+  margin: 0 0 var(--spacing-xs);
+  padding-right: 2rem;
+  line-height: 1.3;
+}
+
+.svc-detail-body p {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.65;
+  margin-bottom: var(--spacing-md);
 }

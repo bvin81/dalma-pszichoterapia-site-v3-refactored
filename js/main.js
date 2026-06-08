@@ -875,6 +875,207 @@ function initServicesBook() {
 }
 
 /* ---------------------------------------------------
+   SERVICES CARD STACK (mobil)
+--------------------------------------------------- */
+function initServicesCardStack() {
+  const wrapper = document.getElementById('serviceCardStack');
+  if (!wrapper) return;
+
+  const bp = getBasePath();
+  const N = SERVICES.length;
+  if (N === 0) return;
+  const STACK = Math.min(3, N);
+
+  let topIdx = 0;
+  let animating = false;
+
+  // Fixed stack styles by position
+  const ST = [
+    { z: 10, ty: 0,  sc: 1,    rot: 0,    op: 1   },
+    { z: 9,  ty: 10, sc: 0.96, rot: -2,   op: 0.9 },
+    { z: 8,  ty: 20, sc: 0.92, rot: 2.5,  op: 0.8 },
+  ];
+
+  // Create STACK card elements + detail overlay + swipe hint
+  const cardEls = [];
+  for (let i = 0; i < STACK; i++) {
+    const el = document.createElement('div');
+    el.className = 'svc-card';
+    wrapper.appendChild(el);
+    cardEls.push(el);
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'svc-detail-overlay';
+  overlay.innerHTML = `
+    <button class="svc-detail-close" aria-label="Bezárás">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+    <img class="svc-detail-cover" src="" alt="">
+    <div class="svc-detail-body">
+      <h3 class="svc-detail-h3"></h3>
+      <p class="svc-detail-p"></p>
+      <a class="btn btn-secondary svc-detail-link" href="#" data-key="service_more">Bővebben</a>
+    </div>`;
+  wrapper.appendChild(overlay);
+  overlay.querySelector('.svc-detail-close').addEventListener('click', () => overlay.classList.remove('open'));
+
+  const hint = document.createElement('p');
+  hint.className = 'svc-swipe-hint';
+  hint.textContent = '← húzd el →';
+  wrapper.parentNode.insertBefore(hint, wrapper.nextSibling);
+
+  // stackOrder[stackPos] = index into cardEls
+  let stackOrder = Array.from({ length: STACK }, (_, i) => i);
+
+  function svcOf(sp) { return (topIdx + sp) % N; }
+
+  function fillCard(elIdx, svcIdx) {
+    const s = SERVICES[svcIdx];
+    cardEls[elIdx].dataset.svcIdx = String(svcIdx);
+    cardEls[elIdx].innerHTML = `
+      <img src="${bp}${s.img}" alt="" loading="lazy">
+      <div class="svc-card-body">
+        <h3 data-key="${s.titleKey}"></h3>
+        <p data-key="${s.descKey}"></p>
+      </div>`;
+  }
+
+  function placeCard(elIdx, sp, tx, rot, withTransition) {
+    const el = cardEls[elIdx];
+    const s = ST[sp] || ST[STACK - 1];
+    el.style.transition = withTransition
+      ? 'transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease'
+      : 'none';
+    el.style.zIndex = String(s.z);
+    el.style.opacity = String(s.op);
+    el.style.transform = sp === 0
+      ? `translateX(${tx}px) rotate(${rot}deg)`
+      : `translateY(${s.ty}px) scale(${s.sc}) rotate(${s.rot}deg)`;
+  }
+
+  function render() {
+    for (let sp = 0; sp < STACK; sp++) {
+      fillCard(stackOrder[sp], svcOf(sp));
+      placeCard(stackOrder[sp], sp, 0, 0, false);
+    }
+    if (cachedTranslations) updateDOM(cachedTranslations);
+    bindTopCard();
+  }
+
+  function openDetail(svcIdx) {
+    const s = SERVICES[svcIdx];
+    overlay.querySelector('.svc-detail-cover').src = bp + s.img;
+    const h3 = overlay.querySelector('.svc-detail-h3');
+    const p  = overlay.querySelector('.svc-detail-p');
+    h3.dataset.key = s.titleKey;
+    p.dataset.key  = s.descKey;
+    overlay.querySelector('.svc-detail-link').href = bp + s.url;
+    if (cachedTranslations) updateDOM(cachedTranslations);
+    overlay.classList.add('open');
+  }
+
+  function cycleForward(dir) {
+    if (animating) return;
+    animating = true;
+
+    const topElIdx = stackOrder[0];
+    const flyX = dir * (window.innerWidth * 0.75);
+
+    // Fly top card off
+    cardEls[topElIdx].style.transition = 'transform 0.42s ease-in, opacity 0.3s ease';
+    cardEls[topElIdx].style.transform = `translateX(${flyX}px) rotate(${dir * 18}deg)`;
+    cardEls[topElIdx].style.opacity = '0';
+    cardEls[topElIdx].style.zIndex = '11';
+
+    // Shift remaining cards toward top
+    for (let sp = 1; sp < STACK; sp++) {
+      placeCard(stackOrder[sp], sp - 1, 0, 0, true);
+    }
+
+    setTimeout(() => {
+      topIdx = (topIdx + 1) % N;
+      const oldTop = stackOrder[0];
+      stackOrder = [...stackOrder.slice(1), oldTop];
+
+      const newBottomElIdx = stackOrder[STACK - 1];
+      fillCard(newBottomElIdx, svcOf(STACK - 1));
+
+      // Place new bottom card instantly (currently invisible)
+      const bs = ST[STACK - 1];
+      cardEls[newBottomElIdx].style.transition = 'none';
+      cardEls[newBottomElIdx].style.zIndex = String(bs.z);
+      cardEls[newBottomElIdx].style.transform = `translateY(${bs.ty}px) scale(${bs.sc}) rotate(${bs.rot}deg)`;
+      cardEls[newBottomElIdx].style.opacity = '0';
+
+      // Fade it in
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        cardEls[newBottomElIdx].style.transition = 'opacity 0.35s ease';
+        cardEls[newBottomElIdx].style.opacity = String(bs.op);
+      }));
+
+      if (cachedTranslations) updateDOM(cachedTranslations);
+      bindTopCard();
+      animating = false;
+    }, 460);
+  }
+
+  function bindTopCard() {
+    const elIdx = stackOrder[0];
+    const orig  = cardEls[elIdx];
+    const fresh = orig.cloneNode(true);
+    orig.parentNode.replaceChild(fresh, orig);
+    cardEls[elIdx] = fresh;
+
+    const el = cardEls[elIdx];
+    let sx = 0, sy = 0, dx = 0;
+    let dragging = false, moved = false;
+    let lastTouch = 0;
+
+    el.addEventListener('touchstart', (e) => {
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      dx = 0; dragging = true; moved = false;
+    }, { passive: true });
+
+    el.addEventListener('touchmove', (e) => {
+      if (!dragging) return;
+      dx = e.touches[0].clientX - sx;
+      const dy = e.touches[0].clientY - sy;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 6) {
+        e.preventDefault();
+        moved = true;
+        el.style.transition = 'none';
+        el.style.transform = `translateX(${dx}px) rotate(${dx * 0.07}deg)`;
+      }
+    }, { passive: false });
+
+    el.addEventListener('touchend', () => {
+      dragging = false;
+      lastTouch = Date.now();
+      if (moved && Math.abs(dx) > 80) {
+        cycleForward(dx < 0 ? -1 : 1);
+      } else if (moved) {
+        el.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
+        el.style.transform = 'translateX(0) rotate(0deg)';
+      } else {
+        openDetail(parseInt(el.dataset.svcIdx));
+      }
+    });
+
+    // Mouse click (desktop preview only; guard against touch-generated click)
+    el.addEventListener('click', () => {
+      if (Date.now() - lastTouch < 400) return;
+      openDetail(parseInt(el.dataset.svcIdx));
+    });
+  }
+
+  render();
+}
+
+/* ---------------------------------------------------
    VIDEO CAROUSEL
 --------------------------------------------------- */
 function initVideoCarousel() {
@@ -945,6 +1146,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initHeroKenBurns();
   initScrollReveal();
   initServicesBook();
+  initServicesCardStack();
   initVideoCarousel();
 
   if (document.getElementById("blogContainer")) {
