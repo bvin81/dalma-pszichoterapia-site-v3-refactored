@@ -121,6 +121,56 @@
   </div>
 </section>
 
+<!-- TV SZEREPLÉSEK SLIDER -->
+<section id="tv-appearances" class="tv-appearances">
+  <div class="container">
+    <h2 data-key="tv_title">Itt láthattál korábban</h2>
+    <div class="video-slider" role="region" aria-label="Tévés szereplések">
+      <button class="slider-btn slider-prev" aria-label="Előző videó">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <div class="slider-track">
+
+        <!-- 1. videó – cseréld ki: YOUTUBE_VIDEO_ID_1 -->
+        <div class="slider-item active">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/watch?v=m9t6IFTTZJQ"
+              title="Az öngondoskodás fontossága mindennapjainkban – Mozaik"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy">
+            </iframe>
+          </div>
+          <p class="video-caption">Műsor neve – Csatorna neve, 2024</p>
+        </div>
+
+        <!-- 2. videó – cseréld ki: YOUTUBE_VIDEO_ID_2 -->
+        <div class="slider-item">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/watch?v=FPe6UmQHknk"
+              title="Csendes küzdelmek: szorongás, depresszió, pánik – Nőszemközt"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy">
+            </iframe>
+          </div>
+          <p class="video-caption">Műsor neve – Csatorna neve, 2024</p>
+        </div>
+
+      </div>
+      <button class="slider-btn slider-next" aria-label="Következő videó">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
+    </div>
+    <div class="slider-dots">
+      <button class="dot active" data-index="0" aria-label="1. videó"></button>
+      <button class="dot" data-index="1" aria-label="2. videó"></button>
+    </div>
+  </div>
+</section>
+
 <!-- SZOLGÁLTATÁSOK -->
 <section id="services" class="services">
   <div class="container">

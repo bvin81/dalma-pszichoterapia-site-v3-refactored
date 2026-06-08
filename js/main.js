@@ -765,6 +765,29 @@ function initScrollReveal() {
 }
 
 /* ---------------------------------------------------
+   VIDEO SLIDER
+--------------------------------------------------- */
+function initVideoSlider() {
+  const items = document.querySelectorAll('.slider-item');
+  const dots = document.querySelectorAll('.dot');
+  if (!items.length) return;
+
+  let current = 0;
+
+  function goTo(index) {
+    items[current].classList.remove('active');
+    if (dots[current]) dots[current].classList.remove('active');
+    current = ((index % items.length) + items.length) % items.length;
+    items[current].classList.add('active');
+    if (dots[current]) dots[current].classList.add('active');
+  }
+
+  document.querySelector('.slider-prev')?.addEventListener('click', () => goTo(current - 1));
+  document.querySelector('.slider-next')?.addEventListener('click', () => goTo(current + 1));
+  dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index, 10))));
+}
+
+/* ---------------------------------------------------
    PAGE INITIALIZATION
 --------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', function() {
@@ -777,6 +800,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initHeaderScroll();
   initHeroKenBurns();
   initScrollReveal();
+  initVideoSlider();
 
   if (document.getElementById("blogContainer")) {
     loadBlogList();
