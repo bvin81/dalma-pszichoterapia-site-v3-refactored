@@ -279,12 +279,26 @@ html {
   margin-bottom: var(--spacing-lg);
 }
 
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.video-carousel {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.carousel-window {
+  flex: 1;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
   gap: var(--spacing-md);
-  max-width: 780px;
-  margin: 0 auto;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-item {
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .video-wrapper {
@@ -314,8 +328,35 @@ html {
   font-size: var(--font-size-sm);
 }
 
-@media (max-width: 600px) {
-  .video-grid {
-    grid-template-columns: 1fr;
-  }
+.carousel-btn {
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.carousel-btn:hover {
+  background: var(--accent-main);
+  border-color: var(--accent-main);
+}
+
+.carousel-btn svg {
+  fill: var(--text-muted);
+  transition: fill var(--transition-fast);
+}
+
+.carousel-btn:hover svg {
+  fill: white;
+}
+
+.carousel-btn.hidden {
+  visibility: hidden;
+  pointer-events: none;
 }

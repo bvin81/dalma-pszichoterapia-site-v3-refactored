@@ -125,34 +125,44 @@
 <section id="tv-appearances" class="tv-appearances">
   <div class="container">
     <h2 data-key="tv_title">Itt láthattál korábban</h2>
-    <div class="video-grid">
+    <div class="video-carousel">
+      <button class="carousel-btn carousel-prev hidden" aria-label="Előző videók">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <div class="carousel-window">
+        <div class="carousel-track">
 
-      <div class="video-item">
-        <div class="video-wrapper">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/m9t6IFTTZJQ"
-            title="Az öngondoskodás fontossága mindennapjainkban – Mozaik"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
+          <div class="video-item">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/m9t6IFTTZJQ"
+                title="Az öngondoskodás fontossága mindennapjainkban – Mozaik"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy">
+              </iframe>
+            </div>
+            <p class="video-caption">Az öngondoskodás fontossága mindennapjainkban – Mozaik</p>
+          </div>
+
+          <div class="video-item">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/FPe6UmQHknk"
+                title="Csendes küzdelmek: szorongás, depresszió, pánik – Nőszemközt"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy">
+              </iframe>
+            </div>
+            <p class="video-caption">Csendes küzdelmek: szorongás, depresszió, pánik – Nőszemközt</p>
+          </div>
+
         </div>
-        <p class="video-caption">Az öngondoskodás fontossága mindennapjainkban – Mozaik</p>
       </div>
-
-      <div class="video-item">
-        <div class="video-wrapper">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/FPe6UmQHknk"
-            title="Csendes küzdelmek: szorongás, depresszió, pánik – Nőszemközt"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-        </div>
-        <p class="video-caption">Csendes küzdelmek: szorongás, depresszió, pánik – Nőszemközt</p>
-      </div>
-
+      <button class="carousel-btn carousel-next hidden" aria-label="Következő videók">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
     </div>
   </div>
 </section>
