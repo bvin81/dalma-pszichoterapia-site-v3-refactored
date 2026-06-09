@@ -1039,7 +1039,7 @@ function initVideoCarousel() {
 
   const prevBtn = document.querySelector('.carousel-prev');
   const nextBtn = document.querySelector('.carousel-next');
-  const VISIBLE = 1;
+  const VISIBLE = 3;
   let current = 0;
 
   function visibleCount() {
