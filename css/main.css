@@ -202,24 +202,6 @@ html {
   gap: var(--spacing-sm);
 }
 
-@media (max-width: 600px) {
-  .video-carousel {
-    position: relative;
-  }
-
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(4px);
-  }
-
-  .carousel-btn.carousel-prev { left: var(--spacing-xs); }
-  .carousel-btn.carousel-next { right: var(--spacing-xs); }
-}
-
 .carousel-window {
   flex: 1;
   overflow: hidden;
